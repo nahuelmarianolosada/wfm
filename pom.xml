@@ -96,6 +96,11 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
@@ -104,25 +109,8 @@
 					<port>8080</port>
 					<path>/workforce</path>
 				</configuration>
-				<!--<configuration>-->
-					<!--<url>http://localhost:8080/manager/text</url>-->
-					<!--<server>Apache_Tomcat_7_x86</server>-->
-					<!--<path>/Application</path>-->
-				<!--</configuration>-->
+
 			</plugin>
-			<!--<plugin>-->
-				<!--<groupId>org.springframework.boot</groupId>-->
-				<!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-				<!--&lt;!&ndash;<version>1.5.10.RELEASE</version>&ndash;&gt;-->
-				<!--<configuration>-->
-					<!--<addResources>true</addResources>-->
-
-						<!--<url>http://localhost:8080/manager/text</url>-->
-						<!--<server>Apache_Tomcat_7_x86</server>-->
-						<!--<path>/HelloWorld</path>-->
-
-				<!--</configuration>-->
-			<!--</plugin>-->
 		</plugins>
 	</build>
 
