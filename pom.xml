@@ -122,7 +122,7 @@
 							<outputDirectory>${basedir}/target/classes/static/</outputDirectory >
 							<resources>
 								<resource>
-									<directory>${basedir}/../angular4-client/dist</directory >
+									<directory>${basedir}/../workforce/src/main/webapp/WEB-INF/views/wfm-front/dist</directory >
 								</resource>
 							</resources>
 						</configuration>
