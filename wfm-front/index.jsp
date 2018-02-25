@@ -10,8 +10,7 @@
 </head>
 <body>
 <app-root></app-root>
-
-<p>${someAttribute}</p>
 </body>
 </html>
 
+<%--<p>${someAttribute}</p>--%>

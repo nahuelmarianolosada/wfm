@@ -22,6 +22,10 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<UI.files.folder>${project.build.directory}/classes/static</UI.files.folder>
+		<frontend.artifact.id>search-client</frontend.artifact.id>
+		<angular.project.location>./wfm-front</angular.project.location>
+		<angular.project.nodeinstallation>./src/main/resources</angular.project.nodeinstallation>
 	</properties>
 
 	<dependencies>
@@ -46,10 +50,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.liquibase</groupId>
-			<artifactId>liquibase-core</artifactId>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.liquibase</groupId>-->
+			<!--<artifactId>liquibase-core</artifactId>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -88,37 +92,104 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.security</groupId>-->
+			<!--<artifactId>spring-security-test</artifactId>-->
+			<!--<scope>test</scope>-->
+		<!--</dependency>-->
 	</dependencies>
 
 	<build>
+
 		<plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<port>8081</port>
+					<port>8080</port>
 					<path>/workforce</path>
 				</configuration>
 			</plugin>
 
 			<plugin>
+				<groupId>com.github.eirslett</groupId>
+				<artifactId>frontend-maven-plugin</artifactId>
+				<version>1.0</version>
+				<configuration>
+					<workingDirectory>${angular.project.location}</workingDirectory>
+					<installDirectory>/home/nahuel/IdeaProjects/workforce/src/main/webapp/WEB-INF/views/wfm-front</installDirectory>
+					<nodeVersion>v9.5.0</nodeVersion>
+					<npmVersion>5.6.0</npmVersion>
+				</configuration>
+				<executions>
+					 <!--It will install nodejs and npm -->
+					<execution>
+						<id>install node and npm</id>
+						<goals>
+							<goal>install-node-and-npm</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>npm install</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+					</execution>
+					 <!--It will execute command "npm build" inside "/wfm-front" directory-->
+                        <!--to clean and create "/dist" directory -->
+					<execution>
+						<id>npm run build</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+						<configuration>
+							<arguments>run build</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Plugin to copy the content of /angular/dist/ directory to output
+                directory (ie/ /target/transactionManager-1.0/) -->
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<webResources>
+						<resource>
+							<!-- this is relative to the pom.xml directory -->
+							<!--<directory>src/main/webapp/WEB-INF/views/wfm-front/dist</directory>-->
+							<directory>target</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.2</version>
 				<executions>
 					<execution>
 						<id>copy-resources</id>
 						<phase>validate</phase>
 						<goals><goal>copy-resources</goal></goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/classes/static/</outputDirectory >
+							<overwrite>true</overwrite>
+							<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${basedir}/../angular4-client/dist</directory >
+									<directory>${project.basedir}/${angular.project.location}/dist</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -126,6 +197,24 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>dist</directory>
+			</resource>
+		</resources>
+
+		<!--<resources>-->
+			<!--<resource>-->
+				<!--<directory>/home/nahuel/IdeaProjects/workforce/src/main/webapp/WEB-INF/views/wfm-front/dist</directory>-->
+				<!--<targetPath>static</targetPath>-->
+				<!--&lt;!&ndash;<filtering>false</filtering>&ndash;&gt;-->
+				<!--&lt;!&ndash;<directory>dist</directory>&ndash;&gt;-->
+			<!--</resource>-->
+		<!--</resources>-->
+
 	</build>
 
 
